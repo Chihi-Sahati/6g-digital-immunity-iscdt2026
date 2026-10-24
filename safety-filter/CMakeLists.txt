@@ -56,7 +56,13 @@ add_compile_options(
 
 # Release optimisations with debug symbols for profiling.
 if(CMAKE_BUILD_TYPE STREQUAL "Release" OR CMAKE_BUILD_TYPE STREQUAL "RelWithDebInfo")
-    add_compile_options(-O2 -march=native)
+    add_compile_options(-O2)
+    # -march=native is opt-in: it made the test binary exit with code 127 on the
+    # build machine (MSYS2 UCRT64). Enable it explicitly with -DCBF_MARCH_NATIVE=ON.
+    option(CBF_MARCH_NATIVE "Compile with -march=native" OFF)
+    if(CBF_MARCH_NATIVE)
+        add_compile_options(-march=native)
+    endif()
 elseif(CMAKE_BUILD_TYPE STREQUAL "Debug")
     add_compile_options(-g3 -O0 -fno-omit-frame-pointer -fsanitize=address,undefined)
     add_link_options(-fsanitize=address,undefined)
@@ -74,7 +80,8 @@ endif()
 #
 # FindEigen3.cmake is included with recent CMake versions (>= 3.10).
 # Fallback: set EIGEN3_INCLUDE_DIR if not found automatically.
-find_package(Eigen3 3.4 REQUIRED NO_MODULE)
+# Accept Eigen 3.4 up to (not including) 6.0. Eigen 5.x ships with MSYS2 UCRT64.
+find_package(Eigen3 3.4...<6 REQUIRED NO_MODULE)
 
 # Log the found Eigen3 path for diagnostics.
 message(STATUS "Eigen3 found: ${EIGEN3_INCLUDE_DIR}")

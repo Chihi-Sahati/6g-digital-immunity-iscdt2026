@@ -45,6 +45,7 @@
 #include <functional>
 #include <map>
 #include <iostream>
+#include <iomanip>
 #include <optional>
 #include <sstream>
 #include <string>
@@ -274,7 +275,8 @@ public:
     /// @param state Current network state.
     /// @param u Control input vector.
     /// @return Vector of CbfResult, one per registered barrier.
-    /// @throws std::invalid_argument if dimensions mismatch.
+    /// A control vector whose size differs from state_dim fails closed: the affected
+    /// barrier is reported as not passed (margin = -inf), and the error is logged.
     std::vector<CbfResult> evaluate_all_barriers(
         const NetworkState& state,
         const Eigen::VectorXd& u);

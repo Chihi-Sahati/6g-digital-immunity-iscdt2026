@@ -262,11 +262,12 @@ std::vector<CbfResult> CbfEngine::evaluate_all_barriers(
             if (u.size() > 0 && u.size() == state_dim_) {
                 l_g_h_u = (grad_h * u).value();
             } else if (u.size() > 0 && u.size() != state_dim_) {
-                CBF_LOG_WARN("Barrier '"
-                             << barrier.id
-                             << "': u dimension (" << u.size()
-                             << ") != state_dim (" << state_dim_
-                             << "); control Lie derivative set to 0");
+                // Fail closed: a malformed control must never reach the barrier check
+                // with its control term silently set to zero (ISCDT 2026 fix).
+                throw std::invalid_argument(
+                    "Barrier '" + barrier.id + "': u dimension (" +
+                    std::to_string(u.size()) + ") != state_dim (" +
+                    std::to_string(state_dim_) + ")");
             }
 
             // L_f*h: we approximate the drift Lie derivative using the

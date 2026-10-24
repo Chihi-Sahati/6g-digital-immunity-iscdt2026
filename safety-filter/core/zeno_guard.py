@@ -5,6 +5,11 @@
 zeno_guard.py — Deterministic Digital Immunity for 6G Networks
 Phase 2: DSF Core — Zeno Temporal Guard (Python)
 
+Scope note (ISCDT 2026 companion code): in this sampled loop, "Zeno-free" means
+that the minimum inter-actuation interval tau_min is never violated. It is a rate
+limit on actuations, not a continuous-time non-Zeno proof. See ../ASSUMPTIONS.md,
+section 5. The logic below is unchanged from commit 996c6c0.
+
 This module implements the Zeno temporal safety guard for the DSF. A Zeno
 behaviour occurs when a control system issues an infinite number of
 actuations in finite time — a pathological case that can arise from overly
