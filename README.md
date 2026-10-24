@@ -1,16 +1,18 @@
 # ISCDT 2026 companion code: Deterministic Digital Immunity (conference version)
 
-This folder is a **frozen snapshot** of the code that underlies the ISCDT 2026
-paper *"Deterministic Digital Immunity for Software-Defined 6G Networks via Control
-Barrier Functions and Lyapunov Stability"* (accepted for oral presentation,
-Benghazi, 21-23 November 2026).
+This repository holds the code behind the ISCDT 2026 paper *"Deterministic Digital
+Immunity for Software-Defined 6G Networks via Control Barrier Functions and Lyapunov
+Stability"* (accepted for oral presentation, Benghazi, 21-23 November 2026).
 
-It was extracted from git commit `996c6c0` (2026-05-31) with `git archive`, so it is
-byte-identical to that commit. Nothing in this folder is shared with the IEEE TNSM
-revision, which lives at the repository root and was developed after commit
-`ad9c351` (2026-09-28). The two code bases therefore do not depend on each other.
+It is separate from the IEEE TNSM code base (`Chihi-Sahati/6g-digital-immunity`). The
+conference state is tagged:
 
-## Scope of this folder
+- `snapshot-996c6c0`: exact archive of commit 996c6c0 of the TNSM repository (the code used
+  for the conference paper, unchanged).
+- `iscdt-2026-v1`: the same code with the revisions listed in the commit message (C++ fixes,
+  build changes, unit tests, documentation).
+
+## Scope
 
 | Item | Conference version (this folder) | Journal version (repository root) |
 |---|---|---|
