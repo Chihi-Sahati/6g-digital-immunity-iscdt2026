@@ -223,7 +223,7 @@ def fig_tradeoff(sweep: list) -> None:
     ax.text(4600, 50, "campaign\nsetting", color=MUTED, fontsize=6.5, va="center", ha="right")
     ax.set_xscale("log")
     ax.set_xlabel(r"Lyapunov admission threshold $V_{\max}$")
-    ax.set_ylabel("Admitted (%)")
+    ax.set_ylabel("Safe admission (%)")
     ax.set_ylim(0, 100)
     ax.legend(loc="lower right", frameon=False, bbox_to_anchor=(0.86, 0.02))
     viol = sum(s["violations_total"] for s in sweep)
@@ -280,7 +280,7 @@ def fig_decisions(numbers: dict) -> None:
     assert by["Nominal"]["other"] == 0 and by["Adversarial"]["other"] == 0
     assert (by["Nominal"]["acc"] + by["Adversarial"]["acc"]) == tot["accepted"]
     segs = {k: [v["acc"], v["amd"], v["schema"], v["lyap"]] for k, v in by.items()}
-    labels = ["Accepted", "Amended", "Denied: schema", "Denied: Lyapunov"]
+    labels = ["Accepted unchanged", "Amended", "Rejected (Gate 1)", "Rejected (Lyapunov)"]
     colors = [C3, C1, C4, C2]
     hatches = ["", "", "////", "\\\\\\\\"]
     fig, ax = plt.subplots(figsize=(W1, 1.55))
@@ -304,12 +304,42 @@ def fig_decisions(numbers: dict) -> None:
     ax.grid(axis="y", visible=False)
     handles, labs = ax.get_legend_handles_labels()
     order = [labs.index(l) for l in labels if l in labs]
-    ax.legend([handles[i] for i in order], [labs[i] for i in order], ncol=4, frameon=False,
+    ax.legend([handles[i] for i in order], [labs[i] for i in order], ncol=3, frameon=False,
               loc="lower center", bbox_to_anchor=(0.45, 1.0), handlelength=1.2, columnspacing=0.8)
     ax.invert_yaxis()
     fig.savefig(os.path.join(FIG, "fig_decisions.pdf"))
     plt.close(fig)
     numbers["decisions_by_type"] = {k: v for k, v in segs.items()}
+
+    # Per-run spread and composition of the unsafe intents (for traceability).
+    unsafe = unsafe_malformed = multi = 0
+    base_per_run = []
+    for run_id in range(sa.N_RUNS):
+        rng = np.random.default_rng(run_id * 1000 + 42)
+        now, b = 0.0, 0
+        for _ in range(sa.N_INTENTS):
+            now += rng.uniform(0.5, 3.0)
+            it = sa.generate_intent(rng, now)
+            m, ok = sa.compute_cbf_barriers(it.desired_state)
+            if not ok:
+                unsafe += 1
+                multi += int(sum(1 for x in m if x < 0) > 1)
+                unsafe_malformed += int(it.is_malformed)
+                b += int(it.is_adversarial)
+        base_per_run.append(b)
+    bp = np.array(base_per_run)
+    numbers["per_run_spread"] = {
+        "accepted_only_min": float(acc.min()), "accepted_only_max": float(acc.max()),
+        "safe_admission_min": float(adm.min()), "safe_admission_max": float(adm.max()),
+        "baseline_violations_mean": round(float(bp.mean()), 2),
+        "baseline_violations_std": round(float(bp.std(ddof=1)), 2),
+        "baseline_violations_min": int(bp.min()), "baseline_violations_max": int(bp.max()),
+    }
+    numbers["unsafe_intents"] = {
+        "total": unsafe, "malformed_rejected_by_gate1": unsafe_malformed,
+        "reaching_gate2": unsafe - unsafe_malformed, "violating_more_than_one_barrier": multi,
+        "share_of_adversarial": round(unsafe / tot["adversarial"], 4),
+    }
 
 
 # ---------------------------------------------------------------------------

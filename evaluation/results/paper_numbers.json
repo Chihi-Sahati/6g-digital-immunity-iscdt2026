@@ -55,6 +55,23 @@
       0
     ]
   },
+  "per_run_spread": {
+    "accepted_only_min": 0.69,
+    "accepted_only_max": 0.763,
+    "safe_admission_min": 0.897,
+    "safe_admission_max": 0.936,
+    "baseline_violations_mean": 212.08,
+    "baseline_violations_std": 11.57,
+    "baseline_violations_min": 187,
+    "baseline_violations_max": 236
+  },
+  "unsafe_intents": {
+    "total": 10604,
+    "malformed_rejected_by_gate1": 847,
+    "reaching_gate2": 9757,
+    "violating_more_than_one_barrier": 0,
+    "share_of_adversarial": 0.7092
+  },
   "ablation": [
     {
       "configuration": "Full DSF",
