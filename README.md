@@ -40,3 +40,9 @@ reproducible from this exact code.
 See the original `docs/REPRODUCIBILITY.md` in this folder and `README.md` of the snapshot
 for Docker and unit-test instructions. The C++ core must be built from `safety-filter/`
 before the Python wrapper can use it (`CMakeLists.txt`).
+
+## Continuous integration
+
+The workflow `.github/workflows/cpp-core.yml` builds the C++ core with CMake and runs
+`tests/test_cbf_core_cpp.cpp` on Ubuntu 24.04. The Python reproduction scripts in
+`evaluation/` are not part of CI; they are run manually as described in `RESULTS.md`.
