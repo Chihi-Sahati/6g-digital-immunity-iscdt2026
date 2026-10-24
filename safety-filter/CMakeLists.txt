@@ -80,8 +80,12 @@ endif()
 #
 # FindEigen3.cmake is included with recent CMake versions (>= 3.10).
 # Fallback: set EIGEN3_INCLUDE_DIR if not found automatically.
-# Accept Eigen 3.4 up to (not including) 6.0. Eigen 5.x ships with MSYS2 UCRT64.
-find_package(Eigen3 3.4...<6 REQUIRED NO_MODULE)
+# Request Eigen3 without a version so that any installed config file is accepted
+# (Ubuntu ships 3.4.0, MSYS2 ships 5.0.1); the minimum version is checked below.
+find_package(Eigen3 REQUIRED NO_MODULE)
+if(DEFINED Eigen3_VERSION AND Eigen3_VERSION VERSION_LESS 3.4)
+    message(FATAL_ERROR "Eigen 3.4 or newer is required, found ${Eigen3_VERSION}")
+endif()
 
 # Log the found Eigen3 path for diagnostics.
 message(STATUS "Eigen3 found: ${EIGEN3_INCLUDE_DIR}")
