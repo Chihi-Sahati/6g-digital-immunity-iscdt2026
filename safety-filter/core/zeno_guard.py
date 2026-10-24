@@ -92,7 +92,7 @@ class ZenoResult:
 
     passed: bool = True
     time_since_last: float = float("inf")
-    tau_min: float = 0.5
+    tau_min: float = 0.2  # 200 ms, as in the ISCDT 2026 campaign and paper
     guard_active: bool = False
     cooldown_remaining: float = 0.0
 
@@ -235,7 +235,7 @@ class ZenoGuard:
     """
 
     # Configuration parameters.
-    tau_min: float = 0.5
+    tau_min: float = 0.2  # 200 ms, as in the ISCDT 2026 campaign and paper
     window_size: int = 5
     cooldown_on_violation: float = 2.0
     cooldown_multiplier: float = 1.5
@@ -565,7 +565,7 @@ class ZenoGuard:
 
 
 def create_zeno_guard_from_config(
-    tau_min_ms: float = 500.0,
+    tau_min_ms: float = 200.0,
     window_size: int = 5,
     cooldown_on_violation_s: float = 2.0,
     cooldown_multiplier: float = 1.5,

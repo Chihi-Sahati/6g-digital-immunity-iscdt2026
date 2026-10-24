@@ -9,40 +9,59 @@ conference state is tagged:
 
 - `snapshot-996c6c0`: exact archive of commit 996c6c0 of the TNSM repository (the code used
   for the conference paper, unchanged).
-- `iscdt-2026-v1`: the same code with the revisions listed in the commit message (C++ fixes,
-  build changes, unit tests, documentation).
+- `iscdt-2026-v1`: first revision (C++ fixes, unit tests, documentation). Does not build
+  on Ubuntu because of the Eigen version check; superseded.
+- `iscdt-2026-v1.1`: current reference version. Builds in CI, consistent documentation,
+  per-run results. Cite this tag.
 
 ## Scope
 
-| Item | Conference version (this folder) | Journal version (repository root) |
+| Item | This repository (conference) | TNSM repository (journal) |
 |---|---|---|
-| Safety filter | C++20 CBF core (`safety-filter/core/cbf_math.cpp`) with Python ctypes wrapper | Python DCBF-QP with trust region (`safety-filter/core/ddi_filter.py`) |
+| Safety filter | C++20 CBF core (`safety-filter/core/cbf_math.cpp`); the campaign uses a Python implementation of the same box barriers | Python DCBF-QP with trust region |
 | Plant | Single cell, 140 GHz (Sub-THz) | 19-cell hexagonal RAN, 7 GHz, 3GPP TR 38.901 UMa |
-| Barriers | Linear box barriers on configuration parameters | Configuration box plus nonlinear KPI barriers (load, edge SINR) |
-| Time model | Continuous-time CBF with Lyapunov condition, sampled at the actuation rate | Discrete-time CBF (DCBF) |
-| Intent generator | Rule-based `llm-agent/intent/config_generator.py` | Fault model `simulation/llm_intent_model.py` |
+| Barriers | Linear box barriers on configuration parameters | Configuration box plus nonlinear KPI barriers |
+| Lyapunov | Static threshold V < 5000 in the campaign; decrease condition in the C++ core | Discrete-time formulation |
+| Intent generator | Synthetic generator `generate_intent()` in `evaluation/statistical_analysis.py` | LLM fault model |
 
-## Files added on top of the snapshot
+## Documentation
 
-- `README.md`: this file.
 - `REVIEW_RESPONSE.md`: point-by-point response to the committee's MINOR REVISION report.
-- `ASSUMPTIONS.md`: the modelling assumptions under which the "guarantee" language holds (reviewer comment 2).
+- `ASSUMPTIONS.md`: assumptions under which the safety claims hold (reviewer comment 2).
 - `LIMITATIONS.md`: simulation-versus-reality discussion (reviewer comment 1).
-- `INTENT_MAPPING.md`: how an intent becomes a CBF constraint and what the LLM contributes (reviewer comment 4).
-- `RELEASE.md`: what is and is not released, and under which terms (reviewer comment 4).
+- `INTENT_MAPPING.md`: intent format, gate logic and the intent generator (comments 3 and 4).
+- `RESULTS.md` and `evaluation/results/`: reproduced numbers and decision breakdown (comment 3).
+- `RELEASE.md`: what is released (comment 4).
+- `CPP_STATUS.md`: state of the C++ core, its fixes and tests.
 
-No source logic was changed. The only code edit is a clarifying note in the docstring of
-`safety-filter/core/zeno_guard.py`, so that the numbers reported in the paper remain
-reproducible from this exact code.
+## Changes to the snapshot code
 
-## How to run (as in the original commit)
+- `safety-filter/core/cbf_math.hpp`: missing `#include <iomanip>` added.
+- `safety-filter/core/cbf_math.cpp`: a control vector of the wrong size now fails closed.
+- `safety-filter/CMakeLists.txt`: Eigen 3.4 or newer accepted; `-march=native` is opt-in.
+- `safety-filter/core/zeno_guard.py`: default tau_min 0.2 s (was 0.5 s), matching the
+  campaign and the paper; docstring scope note.
+- New: `tests/test_cbf_core_cpp.cpp`, `evaluation/acceptance_breakdown.py`,
+  `evaluation/campaign_details.py`, `.github/workflows/cpp-core.yml`.
 
-See the original `docs/REPRODUCIBILITY.md` in this folder and `README.md` of the snapshot
-for Docker and unit-test instructions. The C++ core must be built from `safety-filter/`
-before the Python wrapper can use it (`CMakeLists.txt`).
+The campaign script `evaluation/statistical_analysis.py` is unchanged, so the reported
+numbers are reproduced from the same code.
+
+## How to run
+
+    # Campaign (Python 3, numpy, scipy, matplotlib)
+    python3 evaluation/statistical_analysis.py
+    python3 evaluation/campaign_details.py
+
+    # C++ core (CMake, a C++20 compiler, Eigen 3.4 or newer)
+    cmake -S safety-filter -B build -DCMAKE_BUILD_TYPE=Release -DBUILD_PYTHON_BINDINGS=OFF
+    cmake --build build
+    g++ -std=c++20 -Isafety-filter/core -I<eigen-include> tests/test_cbf_core_cpp.cpp build/libcbf_core.a -o test_cbf_core
+    ./test_cbf_core
 
 ## Continuous integration
 
 The workflow `.github/workflows/cpp-core.yml` builds the C++ core with CMake and runs
-`tests/test_cbf_core_cpp.cpp` on Ubuntu 24.04. The Python reproduction scripts in
+`tests/test_cbf_core_cpp.cpp` on Ubuntu 24.04, and runs `tests/test_zeno_guard.py` with
+pytest. The Python reproduction scripts in
 `evaluation/` are not part of CI; they are run manually as described in `RESULTS.md`.

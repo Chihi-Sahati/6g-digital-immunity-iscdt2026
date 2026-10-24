@@ -25,3 +25,18 @@ jobs:
           g++ -std=c++20 -Wall -Wextra -Isafety-filter/core -I/usr/include/eigen3 \
             tests/test_cbf_core_cpp.cpp build/libcbf_core.a -o test_cbf_core
           ./test_cbf_core
+
+  python-tests:
+    runs-on: ubuntu-24.04
+    steps:
+      - uses: actions/checkout@v4
+
+      - uses: actions/setup-python@v5
+        with:
+          python-version: "3.12"
+
+      - name: Install test dependencies
+        run: pip install pytest numpy
+
+      - name: Run Zeno guard tests
+        run: python -m pytest -q tests/test_zeno_guard.py

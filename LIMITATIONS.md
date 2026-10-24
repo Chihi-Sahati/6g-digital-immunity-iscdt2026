@@ -9,9 +9,10 @@ This document answers reviewer comment 1 of the ISCDT 2026 committee.
    closed-form FSPL term (about 32 dB relative to 3.5 GHz). Real Sub-THz channels also
    have blockage and atmospheric effects that are not modelled in the conference version.
 
-2. **Latency transfer.** The sub-1.6 ms DSF latency is a wall-clock measurement of the
-   filter code on the test machine. It excludes network round trips to the OsmoBTS
-   or the O-RAN control plane. Real deployments add those delays, and the latency
+2. **Latency transfer.** The sub-1.6 ms DSF latency is not a measurement of the filter
+   alone: it is the Python run time of the campaign plus a random term added in each gate
+   (item 6). It also excludes network round trips to the OsmoBTS or the O-RAN control
+   plane, and the C++ core's latency has not been measured. Real deployments add those delays, and the latency
    budget must be measured end to end before any deployment claim is made.
 
 3. **LLM realism.** The intent generator in this version is rule-based

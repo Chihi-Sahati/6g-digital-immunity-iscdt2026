@@ -25,11 +25,16 @@ them the claims must be read as empirical observations from the simulator.
 
 ## 3. Lyapunov condition
 
-- The Lyapunov condition V_dot <= -alpha V is imposed per intent in continuous time. It
-  is an approximation that holds for the single-cell, fast-filter loop of this version.
-  The journal version replaces it with a discrete-time formulation, because a per-step
-  continuous-time decrease condition is not meaningful for a sampled integrator.
-- Convergence is therefore a property of the modelled integrator, not of the full 6G RAN.
+- The C++ core (`CbfEngine::evaluate_lyapunov`) implements the decrease condition
+  V_dot <= -alpha V. The 50-run campaign does not use it.
+- The campaign (`gate2_cbf` in `evaluation/statistical_analysis.py`) uses a static check
+  instead: V(x) = ||x - x_ref||^2 with x_ref = (30 dBm, 3 dB, 50 %), and an intent is
+  denied when V >= 5000. This is a distance threshold, not a decrease condition, and it
+  gives no convergence guarantee.
+- This check is the main source of denials: 74.4 percent of all denials are intents whose
+  barriers hold but whose V is above the threshold (`evaluation/results/campaign_breakdown.md`).
+- A per-step continuous-time decrease condition is not meaningful for a sampled loop. The
+  journal version replaces it with a discrete-time formulation.
 
 ## 4. Delays
 
@@ -45,10 +50,10 @@ them the claims must be read as empirical observations from the simulator.
 - Because the loop is sampled, a Zeno trajectory cannot occur inside the simulated
   loop. The guard is therefore a safety margin against the physical command rate of the
   network element.
-- The campaign in `evaluation/statistical_analysis.py` uses TAU_MIN_MS = 200.0 (verified
-  by re-running the script). The default in `safety-filter/core/zeno_guard.py` is 0.5 s.
-  The paper's parameter table states 200 ms, which matches the campaign. The code default
-  is therefore inconsistent with the reported results and must be documented or changed.
+- The campaign in `evaluation/statistical_analysis.py` uses TAU_MIN_MS = 200.0, which is
+  the value in the paper. The default of `ZenoGuard.tau_min` in
+  `safety-filter/core/zeno_guard.py` was 0.5 s in the snapshot and is now 0.2 s, so code,
+  campaign and paper agree.
 - In the campaign, every intent is separated from the previous one by 0.5 to 3.0 s
   (`run_single_experiment`), so the 200 ms guard can never fire. The 0.0 Zeno-violation
   rate is therefore a consequence of the generator, not evidence of a tested guarantee.

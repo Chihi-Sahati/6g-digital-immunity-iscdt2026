@@ -95,7 +95,7 @@ class TestInitialization:
 
     def test_default_values(self):
         guard = ZenoGuard()
-        assert guard.tau_min == 0.5
+        assert guard.tau_min == 0.2
         assert guard.window_size == 5
         assert guard.cooldown_on_violation == 2.0
         assert guard.cooldown_multiplier == 1.5
@@ -697,7 +697,7 @@ class TestFactoryFunction:
 
     def test_default_factory(self):
         guard = create_zeno_guard_from_config()
-        assert guard.tau_min == pytest.approx(0.5)  # 500ms / 1000
+        assert guard.tau_min == pytest.approx(0.2)  # 200ms / 1000
         assert guard.window_size == 5
 
     def test_custom_ms_conversion(self):

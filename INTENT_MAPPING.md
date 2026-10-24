@@ -27,25 +27,29 @@ check is applied.
   requested state from uniform distributions, with 30 percent adversarial intents and
   8 percent malformed intents. The paper must describe this as a synthetic generator.
   Any claim about LLM behaviour must come from a separate experiment, which is not in
-  this folder.
+  this repository.
 
 ## 3. Mapping to barriers
 
 1. Gate 1 (CUE schema) rejects malformed intents and out-of-range fields.
-2. Gate 2 (CBF) takes each accepted field as a component of the state vector and checks
-   the barrier constraint for the box barrier of that field. The filter returns one of
-   three verdicts: accept, amend or deny. The author must confirm the amendment rule
-   used by the conference code, because it is not written out in this folder.
-3. Gate 3 (ZenoGuard) enforces the minimum inter-actuation interval tau_min before the
-   verdict is applied.
+2. Gate 2 (CBF and Lyapunov), as implemented in the campaign (`gate2_cbf`):
+   - Four linear barriers: h1 = 43 - P_tx, h2 = P_tx - 0, h3 = 100 - PRB, h4 = H_HO - 0.
+   - If all barriers hold, the intent is accepted when V = ||x - x_ref||^2 < 5000 with
+     x_ref = (30, 3, 50), and denied otherwise.
+   - If a barrier is violated, the intent is amended by clamping the violating parameter:
+     P_tx to 42 dBm (above the ceiling) or 1 dBm (below the floor), PRB to 95 percent,
+     H_HO to 0.5 dB. The amended intent is accepted if all barriers then hold.
+3. Gate 3 (Zeno guard) denies an intent that arrives less than tau_min = 200 ms after the
+   previous actuation.
 
-The 49.4 percent acceptance figure counts "accepted" and "amended" together. The split
-between accepted and amended, and the cause of each rejection, must be reported in the
-paper from the raw results. They are not in this folder yet.
+The stored acceptance rate (49.36 percent) counts accepted intents only. Accepted and
+amended together are 68.88 percent. The full breakdown, including the cause of every
+denial, is in `evaluation/results/campaign_breakdown.md` and per run in
+`evaluation/results/per_run.csv`.
 
 ## 4. Verified numbers of the campaign
 
-Re-running `evaluation/statistical_analysis.py` in this folder (seeds run_id * 1000 + 42,
+Re-running `evaluation/statistical_analysis.py` in this repository (seeds run_id * 1000 + 42,
 N = 50 runs, 1000 intents each) reproduces:
 
 - Acceptance rate: 49.36 percent (mean 0.493640), 95 percent CI [0.489, 0.498].

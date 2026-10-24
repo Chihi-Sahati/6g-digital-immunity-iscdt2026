@@ -1,6 +1,6 @@
 # Results, and how to regenerate them
 
-Command, from this folder:
+Command, from this repository:
 
     python3 evaluation/statistical_analysis.py
 
@@ -34,3 +34,17 @@ Command: `python3 evaluation/acceptance_breakdown.py`
 The stored `acceptance_rate` counts accepted intents only. The paper's claim of 49.4 percent
 "including amendment" is therefore incorrect. The correct statement is 68.9 percent accepted
 or amended, 49.4 percent accepted without amendment.
+
+## Denial causes and per-run data
+
+`python3 evaluation/campaign_details.py` writes `evaluation/results/per_run.csv` (one row
+per run) and `evaluation/results/campaign_breakdown.md`. Summary:
+
+- Denials: 3,988 by the schema gate (malformed intents), 11,573 by the Lyapunov threshold
+  with all barriers satisfied, 0 because an amendment failed, 0 by the Zeno guard.
+- Nominal intents: 59.0 percent accepted, 0 percent amended, 41.0 percent denied.
+- Adversarial intents: 26.8 percent accepted (barriers satisfied), 65.3 percent amended,
+  8.0 percent denied.
+
+The low acceptance rate therefore reflects the static Lyapunov threshold (conservative
+filtering), not intent quality or barrier tightness.
