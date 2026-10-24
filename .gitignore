@@ -54,3 +54,8 @@ data/zookeeper/
 infra/certs/**/*.key
 infra/certs/**/*.crt
 infra/certs/**/*.srl
+# Generated figures and manuscript material are kept outside the repository
+evaluation/figures/
+*.tex
+*.docx
+mdpi_figures/

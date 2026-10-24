@@ -31,14 +31,17 @@ This is what the repository contains and what the evaluation actually uses.
 - Unit test: `tests/test_cbf_core_cpp.cpp`, 8 checks. A defect found by the first version
   of the test (a control vector of the wrong size silently disabled the control term) has
   been fixed; see "Fix applied" below. All 8 checks pass.
-- The 1.56 ms latency in the paper is the Python latency of the simulation (see
+- The 1.56 ms latency in the submitted paper is the Python latency of the simulation (see
   `LIMITATIONS.md`, item 6). It is not a latency of the C++ core.
 
-## What remains before the paper can claim a C++ result
+## What remains open
 
 1. The campaign does not call the C++ core. Either wire it in through `cbf_engine.py` and
    re-run, or describe the campaign as a Python reference implementation of the barriers.
-2. The C++ core's latency has not been measured. The 1.56 ms figure is not a C++ latency.
+2. Latency is now measured by `tests/bench_cbf_core.cpp`: 0.30 us mean, 0.37 us p99 per
+   evaluation of four barriers and the Lyapunov condition (100,000 evaluations, -O2,
+   Intel Core Ultra 7 255H in a Linux VM). The Python gate pipeline takes 17 us mean
+   (`evaluation/bench_python_gates.py`). The 1.56 ms figure is not a C++ latency.
 
 ## Build and test on Windows (24 October 2026)
 

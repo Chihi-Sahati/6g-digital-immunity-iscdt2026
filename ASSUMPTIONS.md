@@ -31,8 +31,9 @@ them the claims must be read as empirical observations from the simulator.
   instead: V(x) = ||x - x_ref||^2 with x_ref = (30 dBm, 3 dB, 50 %), and an intent is
   denied when V >= 5000. This is a distance threshold, not a decrease condition, and it
   gives no convergence guarantee.
-- This check is the main source of denials: 74.4 percent of all denials are intents whose
-  barriers hold but whose V is above the threshold (`evaluation/results/campaign_breakdown.md`).
+- At V_max = 5000 the check denies no intent of the (corrected) generator; it becomes
+  binding below roughly V_max = 3000 (`evaluation/results/vmax_sweep.csv`). Before the fix
+  described in `ERRATUM.md` it denied 11,573 nominal intents.
 - A per-step continuous-time decrease condition is not meaningful for a sampled loop. The
   journal version replaces it with a discrete-time formulation.
 
@@ -57,10 +58,3 @@ them the claims must be read as empirical observations from the simulator.
 - In the campaign, every intent is separated from the previous one by 0.5 to 3.0 s
   (`run_single_experiment`), so the 200 ms guard can never fire. The 0.0 Zeno-violation
   rate is therefore a consequence of the generator, not evidence of a tested guarantee.
-
-## 6. Scope statement to use in the paper
-
-"Within the stated single-cell integrator model, the barrier constraints are forward
-invariant for the configured parameter box, and the minimum inter-actuation interval is
-enforced by construction. Results on the 6G RAN simulator are empirical, and transfer
-to hardware is not established."

@@ -25,7 +25,7 @@ check is applied.
 - **Generator used for the 50,000-intent campaign:** no language model. The campaign
   in `evaluation/statistical_analysis.py` (`generate_intent`) draws the current and
   requested state from uniform distributions, with 30 percent adversarial intents and
-  8 percent malformed intents. The paper must describe this as a synthetic generator.
+  8 percent malformed intents. Results obtained with it describe the filter on synthetic intents.
   Any claim about LLM behaviour must come from a separate experiment, which is not in
   this repository.
 
@@ -42,17 +42,16 @@ check is applied.
 3. Gate 3 (Zeno guard) denies an intent that arrives less than tau_min = 200 ms after the
    previous actuation.
 
-The stored acceptance rate (49.36 percent) counts accepted intents only. Accepted and
-amended together are 68.88 percent. The full breakdown, including the cause of every
-denial, is in `evaluation/results/campaign_breakdown.md` and per run in
-`evaluation/results/per_run.csv`.
+The stored acceptance rate (72.51 percent after the fix in `ERRATUM.md`) counts accepted
+intents only. Accepted and amended together are 92.02 percent. The full breakdown,
+including the cause of every denial, is in `evaluation/results/campaign_breakdown.md` and
+per run in `evaluation/results/per_run.csv`.
 
-## 4. Verified numbers of the campaign
+## 4. Verified numbers of the campaign (v1.2)
 
-Re-running `evaluation/statistical_analysis.py` in this repository (seeds run_id * 1000 + 42,
-N = 50 runs, 1000 intents each) reproduces:
+Re-running `evaluation/statistical_analysis.py` (seeds run_id * 1000 + 42, 50 runs,
+1000 intents each) gives:
 
-- Acceptance rate: 49.36 percent (mean 0.493640), 95 percent CI [0.489, 0.498].
-- Average DSF latency: 1.57 ms (the report stored in the repository gives 1.56 ms;
-  this difference comes from the timing noise in the Python run).
+- Accepted without amendment: 72.51 percent (mean 0.725100), 95 percent CI [0.721, 0.729].
+- The reported "DSF latency" (about 1.58 ms) is not a measurement; see `LIMITATIONS.md`.
 - Baseline violations: 212.1 per run; DSF violations: 0.0 per run.

@@ -1,0 +1,199 @@
+{
+  "telemetry": {
+    "steps": 600,
+    "seed": 2026,
+    "burn_in": 100,
+    "fspl_penalty_140_db": 32.04,
+    "prb_mean": 76.5,
+    "prb_std": 15.4,
+    "rsrp_mean_3p5": -69.8,
+    "rsrp_mean_140": -101.9,
+    "sinr_mean_3p5": 13.5,
+    "sinr_mean_140": -2.5
+  },
+  "campaign": {
+    "totals": {
+      "intents": 50000,
+      "accepted": 36255,
+      "amended": 9757,
+      "denied": 3988,
+      "denied_gate1_schema": 3988,
+      "denied_gate2_lyapunov": 0,
+      "denied_gate2_unamendable": 0,
+      "denied_gate3_zeno": 0,
+      "nominal": 35048,
+      "nominal_accepted": 32251,
+      "nominal_amended": 0,
+      "nominal_denied": 2797,
+      "adversarial": 14952,
+      "adversarial_accepted": 4004,
+      "adversarial_amended": 9757,
+      "adversarial_denied": 1191,
+      "malformed": 3988,
+      "safety_violations": 0
+    },
+    "accepted_only_mean": 0.7251,
+    "accepted_only_std": 0.013917,
+    "accepted_only_ci95": [
+      0.7211,
+      0.7291
+    ],
+    "admitted_mean": 0.92024,
+    "admitted_std": 0.009841
+  },
+  "decisions_by_type": {
+    "Nominal": [
+      32251,
+      0,
+      2797,
+      0
+    ],
+    "Adversarial": [
+      4004,
+      9757,
+      1191,
+      0
+    ]
+  },
+  "ablation": [
+    {
+      "configuration": "Full DSF",
+      "accepted_pct": 72.51,
+      "amended_pct": 19.51,
+      "denied_pct": 7.98,
+      "violations_total": 0,
+      "violations_per_run": 0.0
+    },
+    {
+      "configuration": "Without Gate 1 (schema)",
+      "accepted_pct": 78.79,
+      "amended_pct": 21.21,
+      "denied_pct": 0.0,
+      "violations_total": 0,
+      "violations_per_run": 0.0
+    },
+    {
+      "configuration": "Without Gate 2 (CBF + Lyapunov)",
+      "accepted_pct": 92.02,
+      "amended_pct": 0.0,
+      "denied_pct": 7.98,
+      "violations_total": 9757,
+      "violations_per_run": 195.1
+    },
+    {
+      "configuration": "Without Gate 3 (Zeno)",
+      "accepted_pct": 72.51,
+      "amended_pct": 19.51,
+      "denied_pct": 7.98,
+      "violations_total": 0,
+      "violations_per_run": 0.0
+    },
+    {
+      "configuration": "No filter",
+      "accepted_pct": 100.0,
+      "amended_pct": 0.0,
+      "denied_pct": 0.0,
+      "violations_total": 10604,
+      "violations_per_run": 212.1
+    }
+  ],
+  "vmax_sweep": [
+    {
+      "v_max": 100,
+      "admitted_pct": 34.86,
+      "nominal_admitted_pct": 21.8,
+      "adversarial_admitted_pct": 65.46,
+      "violations_total": 0
+    },
+    {
+      "v_max": 200,
+      "admitted_pct": 46.88,
+      "nominal_admitted_pct": 38.57,
+      "adversarial_admitted_pct": 66.36,
+      "violations_total": 0
+    },
+    {
+      "v_max": 300,
+      "admitted_pct": 56.25,
+      "nominal_admitted_pct": 51.63,
+      "adversarial_admitted_pct": 67.09,
+      "violations_total": 0
+    },
+    {
+      "v_max": 500,
+      "admitted_pct": 69.3,
+      "nominal_admitted_pct": 69.83,
+      "adversarial_admitted_pct": 68.06,
+      "violations_total": 0
+    },
+    {
+      "v_max": 750,
+      "admitted_pct": 80.81,
+      "nominal_admitted_pct": 85.45,
+      "adversarial_admitted_pct": 69.91,
+      "violations_total": 0
+    },
+    {
+      "v_max": 1000,
+      "admitted_pct": 86.45,
+      "nominal_admitted_pct": 91.68,
+      "adversarial_admitted_pct": 74.19,
+      "violations_total": 0
+    },
+    {
+      "v_max": 1500,
+      "admitted_pct": 88.06,
+      "nominal_admitted_pct": 92.02,
+      "adversarial_admitted_pct": 78.77,
+      "violations_total": 0
+    },
+    {
+      "v_max": 2000,
+      "admitted_pct": 89.34,
+      "nominal_admitted_pct": 92.02,
+      "adversarial_admitted_pct": 83.06,
+      "violations_total": 0
+    },
+    {
+      "v_max": 3000,
+      "admitted_pct": 92.02,
+      "nominal_admitted_pct": 92.02,
+      "adversarial_admitted_pct": 92.03,
+      "violations_total": 0
+    },
+    {
+      "v_max": 5000,
+      "admitted_pct": 92.02,
+      "nominal_admitted_pct": 92.02,
+      "adversarial_admitted_pct": 92.03,
+      "violations_total": 0
+    },
+    {
+      "v_max": "inf",
+      "admitted_pct": 92.02,
+      "nominal_admitted_pct": 92.02,
+      "adversarial_admitted_pct": 92.03,
+      "violations_total": 0
+    }
+  ],
+  "latency_us": {
+    "cpp_core": {
+      "mean": 0.299,
+      "median": 0.249,
+      "p99": 0.369,
+      "n": 100000
+    },
+    "python_wall": {
+      "mean": 17.115,
+      "median": 13.687,
+      "p99": 77.177,
+      "n": 50000
+    },
+    "python_reported": {
+      "mean": 1582.071,
+      "median": 1609.549,
+      "p99": 2714.583,
+      "n": 50000
+    }
+  }
+}

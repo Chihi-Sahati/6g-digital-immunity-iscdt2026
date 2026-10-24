@@ -21,33 +21,33 @@
 
   Metric: Acceptance Rate (fraction)
     N     = 50
-    Mean  = 0.493640
-    Std   = 0.016134
-    Min   = 0.462000
-    Max   = 0.551000
-    Median= 0.492000
-    Q1    = 0.487000
-    Q3    = 0.499750
+    Mean  = 0.725100
+    Std   = 0.013917
+    Min   = 0.690000
+    Max   = 0.763000
+    Median= 0.725000
+    Q1    = 0.715000
+    Q3    = 0.733750
 
   Metric: Min Safety Margin $h(x)$ (dB / %)
     N     = 50
-    Mean  = 9.325233
-    Std   = 0.299531
-    Min   = 8.687974
-    Max   = 10.021462
-    Median= 9.349100
-    Q1    = 9.094782
-    Q3    = 9.495202
+    Mean  = 2.525828
+    Std   = 0.040979
+    Min   = 2.399982
+    Max   = 2.599061
+    Median= 2.524936
+    Q1    = 2.503794
+    Q3    = 2.553505
 
   Metric: DSF Latency (ms) (ms)
     N     = 50
-    Mean  = 1.564564
-    Std   = 0.018847
-    Min   = 1.531287
-    Max   = 1.602251
-    Median= 1.565366
-    Q1    = 1.550200
-    Q3    = 1.579576
+    Mean  = 1.581650
+    Std   = 0.019526
+    Min   = 1.520860
+    Max   = 1.609283
+    Median= 1.583155
+    Q1    = 1.572254
+    Q3    = 1.595609
 
   Metric: Zeno Violation Rate (fraction)
     N     = 50
@@ -64,25 +64,25 @@
 ------------------------------------------------------------------------------
 
   Metric: Acceptance Rate
-    Mean       = 0.493640
-    Std Error  = 0.002282
+    Mean       = 0.725100
+    Std Error  = 0.001968
     t-critical = 2.0096 (df=49)
-    95% CI     = [0.489055, 0.498225]
-    CI width   = 0.009171
+    95% CI     = [0.721145, 0.729055]
+    CI width   = 0.007910
 
   Metric: Min Safety Margin $h(x)$
-    Mean       = 9.325233
-    Std Error  = 0.042360
+    Mean       = 2.525828
+    Std Error  = 0.005795
     t-critical = 2.0096 (df=49)
-    95% CI     = [9.240108, 9.410359]
-    CI width   = 0.170251
+    95% CI     = [2.514182, 2.537474]
+    CI width   = 0.023292
 
   Metric: DSF Latency (ms)
-    Mean       = 1.564564
-    Std Error  = 0.002665
+    Mean       = 1.581650
+    Std Error  = 0.002761
     t-critical = 2.0096 (df=49)
-    95% CI     = [1.559208, 1.569920]
-    CI width   = 0.010712
+    95% CI     = [1.576101, 1.587200]
+    CI width   = 0.011099
 
   Metric: Zeno Violation Rate
     Mean       = 0.000000
@@ -97,35 +97,36 @@
 ------------------------------------------------------------------------------
 
   Metric: Acceptance Rate
-    W statistic = 0.928993
-    p-value     = 0.005063
-    Verdict     : NON-NORMAL
-    >> Non-parametric tests recommended for this metric.
+    W statistic = 0.991183
+    p-value     = 0.969762
+    Verdict     : NORMAL
 
   Metric: Min Safety Margin $h(x)$
-    W statistic = 0.986511
-    p-value     = 0.834105
+    W statistic = 0.969434
+    p-value     = 0.219482
     Verdict     : NORMAL
 
   Metric: DSF Latency (ms)
-    W statistic = 0.964331
-    p-value     = 0.134966
-    Verdict     : NORMAL
+    W statistic = 0.941433
+    p-value     = 0.015357
+    Verdict     : NON-NORMAL
+    >> Non-parametric tests recommended for this metric.
 
   Metric: Zeno Violation Rate
-    W statistic = 1.000000
-    p-value     = 1.000000
-    Verdict     : NORMAL
+    W statistic = nan
+    p-value     = nan
+    Verdict     : NON-NORMAL
+    >> Non-parametric tests recommended for this metric.
 
 ------------------------------------------------------------------------------
   SECTION 4: EFFECT SIZE (Cohen's d) — DSF vs Baseline
 ------------------------------------------------------------------------------
 
   Metric: Acceptance Rate
-    DSF mean      = 0.4936
+    DSF mean      = 0.7251
     Baseline mean = 1.0000
-    Cohen's d     = -44.3837
-    |d|           = 44.3837 (large)
+    Cohen's d     = -27.9346
+    |d|           = 27.9346 (large)
 
   Metric: Safety Violations
     DSF mean      = 0.00
@@ -134,10 +135,10 @@
     |d|           = 25.9261 (large)
 
   Metric: DSF Latency
-    DSF mean      = 1.5646
+    DSF mean      = 1.5817
     Baseline mean = 0.0000
-    Cohen's d     = 117.4016
-    |d|           = 117.4016 (large)
+    Cohen's d     = 114.5522
+    |d|           = 114.5522 (large)
 
 ------------------------------------------------------------------------------
   SECTION 5: WILCOXON SIGNED-RANK TEST (Paired, Non-Parametric)
@@ -158,13 +159,13 @@
   SECTION 6: SUMMARY OF FINDINGS
 ------------------------------------------------------------------------------
 
-  • DSF acceptance rate:    49.36%
+  • DSF acceptance rate:    72.51%
   • DSF safety violations:  0.0 per run
   • Baseline violations:    212.1 per run
   • Violation reduction:    100.0%
   • Effect size (violations): Cohen's d = -25.93 (large)
-  • Average DSF latency:    1.56 ms
-  • Average safety margin:   9.33 (CBF barrier units)
+  • Average DSF latency:    1.58 ms
+  • Average safety margin:   2.53 (CBF barrier units)
 
 ==============================================================================
   End of Statistical Report

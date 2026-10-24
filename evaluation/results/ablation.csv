@@ -1,0 +1,6 @@
+configuration,accepted_pct,amended_pct,denied_pct,violations_total,violations_per_run
+Full DSF,72.51,19.51,7.98,0,0.0
+Without Gate 1 (schema),78.79,21.21,0.0,0,0.0
+Without Gate 2 (CBF + Lyapunov),92.02,0.0,7.98,9757,195.1
+Without Gate 3 (Zeno),72.51,19.51,7.98,0,0.0
+No filter,100.0,0.0,0.0,10604,212.1

@@ -1,50 +1,43 @@
-# Results, and how to regenerate them
+# Results, and how to regenerate them (v1.2)
 
-Command, from this repository:
+All numbers below come from the corrected campaign (see `ERRATUM.md`).
 
-    python3 evaluation/statistical_analysis.py
+    python3 evaluation/statistical_analysis.py   # statistical_report.txt and plots
+    python3 evaluation/campaign_details.py       # per-run results and denial causes
+    python3 evaluation/paper_figures.py          # figures, ablation, V_max sweep, numbers
+    python3 evaluation/bench_python_gates.py     # measured Python gate latency
+    # C++ latency: see the header of tests/bench_cbf_core.cpp
 
-Output: `evaluation/statistical_report.txt` and `evaluation/statistical_plots/`.
-
-Verified on 24 October 2026 (Python 3, numpy, scipy, matplotlib):
-
-| Quantity | Paper | Repository report (commit 996c6c0) | Re-run |
-|---|---|---|---|
-| Runs x intents | 50 x 50,000 | 50 x 1000 | 50 x 1000 |
-| Acceptance (accepted and amended) | 49.4 percent | 49.36 percent | 49.36 percent |
-| Mean DSF latency | sub-1.6 ms | 1.56 ms | 1.57 ms |
-| Zeno violations | 0 | 0.0 | 0.0 |
-| Baseline violations per run | not stated | 212.1 | 212.1 |
-
-The acceptance rate and the violation counts are reproducible because they use seeded
-random generators. The latency varies with machine load and is not reproducible in the
-strict sense.
-
-## Acceptance breakdown (added 24 October 2026)
-
-Command: `python3 evaluation/acceptance_breakdown.py`
+## Decisions (50 runs x 1000 intents)
 
 | Decision | Intents | Share |
 |---|---|---|
-| Accepted | 24,682 | 49.36 percent |
-| Amended | 9,757 | 19.51 percent |
-| Denied | 15,561 | 31.12 percent |
-| Accepted + amended | 34,439 | 68.88 percent |
+| Accepted | 36,255 | 72.51 % |
+| Amended | 9,757 | 19.51 % |
+| Denied (all by the schema gate) | 3,988 | 7.98 % |
+| Accepted + amended | 46,012 | 92.02 % |
 
-The stored `acceptance_rate` counts accepted intents only. The paper's claim of 49.4 percent
-"including amendment" is therefore incorrect. The correct statement is 68.9 percent accepted
-or amended, 49.4 percent accepted without amendment.
+Per run, accepted without amendment: mean 0.7251, std 0.0139, 95 % CI [0.7211, 0.7291].
+Nominal intents: 92.0 % accepted, 8.0 % denied (malformed). Adversarial intents: 26.8 %
+accepted (they satisfy the barriers), 65.3 % amended, 8.0 % denied (malformed).
+Safety violations: 0 with the filter, 212.1 per run without it.
 
-## Denial causes and per-run data
+## Ablation (`evaluation/results/ablation.csv`)
 
-`python3 evaluation/campaign_details.py` writes `evaluation/results/per_run.csv` (one row
-per run) and `evaluation/results/campaign_breakdown.md`. Summary:
+Removing Gate 2 gives 195.1 violations per run; removing Gate 1 or Gate 3 gives none.
 
-- Denials: 3,988 by the schema gate (malformed intents), 11,573 by the Lyapunov threshold
-  with all barriers satisfied, 0 because an amendment failed, 0 by the Zeno guard.
-- Nominal intents: 59.0 percent accepted, 0 percent amended, 41.0 percent denied.
-- Adversarial intents: 26.8 percent accepted (barriers satisfied), 65.3 percent amended,
-  8.0 percent denied.
+## Lyapunov threshold (`evaluation/results/vmax_sweep.csv`)
 
-The low acceptance rate therefore reflects the static Lyapunov threshold (conservative
-filtering), not intent quality or barrier tightness.
+At V_max = 5000 the threshold denies nothing. Lowering it trades throughput for a tighter
+operating region: at V_max = 500, 69.3 % of intents are admitted; at V_max = 100, 34.9 %.
+There are no safety violations at any threshold, because safety is enforced by the
+barriers, not by the threshold.
+
+## Latency (`evaluation/results/cpp_eval_us.csv`, `python_gate_latency.csv`)
+
+- C++ core, four barriers + Lyapunov: 0.30 us mean, 0.37 us p99.
+- Python gate pipeline, wall clock: 17 us mean, 77 us p99.
+- The campaign's reported "DSF latency" (1.58 ms mean) adds random terms and is not a
+  measurement.
+
+Machine: Intel Core Ultra 7 255H, Linux VM with 2 vCPUs.

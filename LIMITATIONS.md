@@ -32,7 +32,7 @@ This document answers reviewer comment 1 of the ISCDT 2026 committee.
 6. **The 50-run campaign is a synthetic Monte Carlo study, not a system test.** Verified
    against `evaluation/statistical_analysis.py`:
    - Intents are drawn from uniform distributions (`generate_intent`), with 30 percent
-     adversarial and 8 percent malformed intents set by constants. The 49.36 percent
+     adversarial and 8 percent malformed intents set by constants. The 72.51 percent
      acceptance rate follows from these constants and the barrier bounds, not from any
      language model.
    - The barrier checks, the Lyapunov check and the amendment rule are implemented in

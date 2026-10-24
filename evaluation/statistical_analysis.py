@@ -198,7 +198,10 @@ def generate_intent(rng: np.random.Generator, current_time: float) -> Intent:
                 rng.uniform(-3.0, 0.3),
             )
     else:
-        desired_tx, desired_prb, desired_hyst = (
+        # Nominal intent: P_tx in [15, 38] dBm, H_HO in [1, 5] dB, PRB in [20, 75] %.
+        # Fixed in v1.2: the snapshot unpacked these as (tx, prb, hyst), which produced
+        # hysteresis values of 20-75 dB and PRB values of 1-5 % (see ERRATUM.md).
+        desired_tx, desired_hyst, desired_prb = (
             rng.uniform(15.0, 38.0),
             rng.uniform(1.0, 5.0),
             rng.uniform(20.0, 75.0),
